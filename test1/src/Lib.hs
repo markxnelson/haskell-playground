@@ -7,7 +7,10 @@ module Lib
     repeat',
     zip',
     elem',
-    quicksort
+    quicksort,
+    zipWith',
+    flip',
+    largestDivisable
     ) where
 
 someFunc :: IO ()
@@ -56,3 +59,15 @@ quicksort (x:xs) =
     let smallerSorted = quicksort [a | a <- xs, a <= x]
         biggerSorted = quicksort [a | a <- xs, a > x]
     in smallerSorted ++ [x] ++ biggerSorted
+
+zipWith' :: (a -> b -> c) -> [a] -> [b] -> [c]
+zipWith' _ [] _ = []
+zipWith' _ _ [] = []
+zipWith' f (x:xs) (y:ys) = f x y : zipWith' f xs ys
+
+flip' :: (a -> b -> c) -> b -> a -> c
+flip' f y x = f x y
+
+largestDivisable :: (Integral a) => a
+largestDivisable = head (filter p [100000,99999..])
+    where p x = x `mod` 3829 == 0
