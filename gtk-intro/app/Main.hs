@@ -9,23 +9,10 @@ import Control.Monad (void)
 import Data.Text (Text)
 import Data.Vector (Vector)
 import qualified Data.Vector as Vector
+import qualified Data.Vector.Mutable as MVector
 import qualified GI.Gtk as Gtk
 import GI.Gtk.Declarative
 import GI.Gtk.Declarative.App.Simple
-
-data Event
-    = TodoTextChanged Text
-    | TodoSubmitted
-    | Closed
-
-data Todo = Todo
-    { name :: Text
-    }
-
-data State = State
-    { todos :: Vector Todo
-    , currentText :: Text
-    }
 
 main :: IO ()
 main = void $ run App
@@ -46,10 +33,24 @@ view' s = bin
         [todoList, newTodoForm]
     )
     where
-        todoList = container Gtk.Box
-            [#orientation := Gtk.OrientationVertical]
-            (fmap todoItem (todos s))
-        todoItem todo = widget Gtk.Label [#label := name todo]
+        todoList =
+            BoxChild defaultBoxChildProperties {expand = True, fill = True}
+                $ container Gtk.Box
+                    [#orientation := Gtk.OrientationVertical]
+                    (Vector.imap todoItem (todos s))
+        todoItem i todo =
+            bin Gtk.CheckButton
+                [#active := completed todo, on #toggled (TodoToggled i)]
+                $ widget
+                    Gtk.Label
+                    [ #label := completedMarkup todo
+                    , #useMarkup := True
+                    , #halign := Gtk.AlignStart
+                    ]
+                    where
+                        completedMarkup todo
+                            | completed todo = "<s>" <> name todo <> "</s>"
+                            | otherwise = name todo
         newTodoForm = widget
             Gtk.Entry
             [ #text := currentText s
@@ -61,4 +62,9 @@ view' s = bin
 update' :: State -> Event -> Transition State Event
 update' s e = case e of
     TodoTextChanged t -> Transition s {currentText = t} (pure Nothing)
+    TodoSubmitted ->
+        let newTodo = Todo {name = currentText s, completed = False}
+        in Transition s {todos = todos s `Vector.snoc` newTodo, currentText = mempty} (pure Nothing)
+    TodoToggled i -> Transition s { todos = mapAt i toggleCompleted (todos s)} (pure Nothing)
     Closed -> Exit
+
