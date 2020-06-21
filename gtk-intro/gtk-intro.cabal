@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 828ed9df18b3406e4386c2d895840ff3fcc906bb90eac5c374f3334b63a0d3ba
+-- hash: e7fc0f5bef693a71a1942498b2db33527e4534c540fa8b9aca7b1073589ce5dc
 
 name:           gtk-intro
 version:        0.1.0.0
@@ -14,8 +14,7 @@ bug-reports:    https://github.com/markxnelson/haskell-playground/issues
 author:         Mark Nelson
 maintainer:     mark.x.nelson@gmail.com
 copyright:      2020 Mark Nelson
-license:        Other
-license-file:   LICENSE
+license:        OtherLicense
 build-type:     Simple
 extra-source-files:
     README.md
@@ -36,8 +35,10 @@ library
   build-depends:
       base >=4.7 && <5
     , gi-gtk
-    , haskell-gi-base
-    , haskell-gi-overloading >=1.0
+    , gi-gtk-declarative >=0.6.3
+    , gi-gtk-declarative-app-simple >=0.6.3
+    , text
+    , vector
   default-language: Haskell2010
 
 executable gtk-intro-exe
@@ -50,9 +51,11 @@ executable gtk-intro-exe
   build-depends:
       base >=4.7 && <5
     , gi-gtk
+    , gi-gtk-declarative >=0.6.3
+    , gi-gtk-declarative-app-simple >=0.6.3
     , gtk-intro
-    , haskell-gi-base
-    , haskell-gi-overloading >=1.0
+    , text
+    , vector
   default-language: Haskell2010
 
 test-suite gtk-intro-test
@@ -66,7 +69,9 @@ test-suite gtk-intro-test
   build-depends:
       base >=4.7 && <5
     , gi-gtk
+    , gi-gtk-declarative >=0.6.3
+    , gi-gtk-declarative-app-simple >=0.6.3
     , gtk-intro
-    , haskell-gi-base
-    , haskell-gi-overloading >=1.0
+    , text
+    , vector
   default-language: Haskell2010

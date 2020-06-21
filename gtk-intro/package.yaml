@@ -1,7 +1,7 @@
 name:                gtk-intro
 version:             0.1.0.0
 github:              "markxnelson/haskell-playground/gtk-intro"
-license:             Other
+license:             OtherLicense
 author:              "Mark Nelson"
 maintainer:          "mark.x.nelson@gmail.com"
 copyright:           "2020 Mark Nelson"
@@ -22,8 +22,10 @@ description:         Please see the README on GitHub at <https://github.com/mark
 dependencies:
 - base >= 4.7 && < 5
 - gi-gtk
-- haskell-gi-base
-- haskell-gi-overloading >= 1.0
+- gi-gtk-declarative >= 0.6.3
+- gi-gtk-declarative-app-simple >= 0.6.3
+- text
+- vector
 
 library:
   source-dirs: src
